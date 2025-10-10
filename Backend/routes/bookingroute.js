@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const bookingController = require('../controllers/bookingController'); // Adjust the path as necessary
-const auth = require('../middlewares/auth'); // Adjust the path as necessary
+const { createBooking, getUserBookings, getAllBookings, deleteBooking } = require('../controllers/bookingcontroller');
+const auth = require('../middlewares/auth')
 
-router.post('/create', auth, bookingController.createBooking);
-router.get('/user/booked', auth, bookingController.getUserBookings);
-router.get('/all', auth, bookingController.getAllBookings);
-router.delete('/:id', auth, bookingController.deleteBooking);
+// ✅ Correct usage
+router.post('/create',auth, createBooking);
+router.get('/user/:user_id',auth, getUserBookings);
+router.get('/all', getAllBookings);
+router.delete('/delete/:id', deleteBooking);
 
 module.exports = router;

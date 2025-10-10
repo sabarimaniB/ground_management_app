@@ -1,94 +1,79 @@
 const Ground = require('../models/groundmodel');
+const { v4: uuidv4 } = require('uuid');
 
-exports.createGround = async (req, res) => {
+// ✅ Create Ground
+const createGround = async (req, res) => {
     try {
-        const { name, location, type, charges, slots, description, image } = req.body;
-        const provider_id = req.user.user_id;
-
-        if (req.user.role !== 'provider') {
-            return res.status(403).json({ message: 'Only providers can create grounds' });
-        }
-
-        const ground = new Ground({
-            provider_id,
-            name,
-            location,
-            type,
-            image,
-            charges,
-            slots,
-            description
-        });
-
-        await ground.save();
-        res.status(201).json({ message: 'Ground created successfully', ground });
-    } catch (error) {
-        console.error('Error creating ground:', error);
-        res.status(500).json({ error: 'Failed to create ground' });
+      const user = req.user; // Assuming you have auth middleware setting req.user
+  
+      
+  
+      const { name, location, type, image, charges, slots, description } = req.body;
+  
+      // Validate required fields
+      if (!name || !location || !type || !charges || !slots) {
+        return res.status(400).json({ error: 'Please fill all required fields' });
+      }
+  
+      const newGround = new Ground({
+        provider_id: user._id.toString() , // Use UUID string from logged-in provider
+        name,
+        location,
+        type,
+        image: image || '', 
+        charges: Number(charges), // Ensure number
+        slots: slots.split(',').map(s => s.trim()), // Convert CSV string to array
+        description: description || ''
+      });
+  
+      const savedGround = await newGround.save();
+      res.status(201).json(savedGround);
+  
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: err.message });
     }
+  };
+// ✅ Get All Grounds
+const getAllGrounds = async (req, res) => {
+  try {
+    const grounds = await Ground.find();
+    res.status(200).json(grounds);
+  } catch (error) {
+    console.error("Get All Grounds Error:", error);
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.getAllGrounds = async (req, res) => {
+// ✅ Get Ground by ID
+const getGroundById = async (req, res) => {
     try {
-        const grounds = await Ground.find();
-        res.status(200).json(grounds);
+      const ground = await Ground.findById(req.params.ground_id); // use _id
+      if (!ground) {
+        return res.status(404).json({ message: "Ground not found" });
+      }
+      res.status(200).json(ground);
     } catch (error) {
-        console.error('Error fetching grounds:', error);
-        res.status(500).json({ error: 'Failed to fetch grounds' });
+      console.error("Get Ground by ID Error:", error);
+      res.status(500).json({ message: error.message });
     }
+  };
+
+// ✅ Delete Ground
+const deleteGround = async (req, res) => {
+  try {
+    await Ground.deleteOne({ ground_id: req.params.ground_id });
+    res.status(200).json({ message: "Ground deleted successfully" });
+  } catch (error) {
+    console.error("Delete Ground Error:", error);
+    res.status(500).json({ message: error.message });
+  }
 };
 
-exports.getGroundsByProvider = async (req, res) => {
-    try {
-        const { provider_id } = req.params;
-        const grounds = await Ground.find({ provider_id });
-        if (grounds.length === 0) {
-            return res.status(404).json({ error: 'No grounds found for this provider' });
-        }
-        res.status(200).json(grounds);
-    } catch (error) {
-        console.error('Error fetching grounds by provider ID:', error);
-        res.status(500).json({ error: 'Failed to fetch grounds' });
-    }
+// ✅ Export same as bookingController style
+module.exports = {
+  createGround,
+  getAllGrounds,
+  getGroundById
 };
 
-exports.getGroundsByLocation = async (req, res) => {
-    try {
-        const { location, type } = req.query;
-        const query = { location };
-        if (type) query.type = type;
-
-        const grounds = await Ground.find(query);
-        res.status(200).json(grounds);
-    } catch (error) {
-        console.error('Error fetching grounds:', error);
-        res.status(500).json({ error: 'Failed to fetch grounds' });
-    }
-};
-
-exports.getGroundById = async (req, res) => {
-    try {
-        const ground = await Ground.findById(req.params.id);
-        if (!ground) {
-            return res.status(404).json({ error: 'Ground not found' });
-        }
-        res.status(200).json(ground);
-    } catch (error) {
-        console.error('Error fetching ground by ID:', error);
-        res.status(500).json({ error: 'Failed to fetch ground' });
-    }
-};
-
-
-exports.deleteGround = async (req, res) => {
-    try {
-        const ground = await Ground.findByIdAndDelete(req.params.id);
-        if (!ground) {
-            return res.status(404).json({ error: 'Ground not found' });
-        }
-        res.status(200).json({ message: 'Ground deleted successfully' });
-    } catch (error) {
-        console.error('Error deleting ground:', error);
-        res.status(500).json({ error: 'Failed to delete ground' });
-    }
-};

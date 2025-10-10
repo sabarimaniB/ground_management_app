@@ -1,21 +1,17 @@
-import  { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../css/UserForm.css';
+import { UserContext } from '../components/UserContext';
 
-export default function Login() {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+export default function Login() { 
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setUser } = useContext(UserContext);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -24,11 +20,13 @@ export default function Login() {
     try {
       const response = await axios.post('http://localhost:5000/user/login', formData);
 
-      // ✅ Store both token & user info for Navbar to use
+      // Store token & user info
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));
 
-      // ✅ Redirect to home
+      // Update context so Navbar re-renders
+      setUser(response.data.user);
+
       navigate('/');
     } catch (err) {
       console.error(err);
@@ -42,39 +40,25 @@ export default function Login() {
         <h2>Login</h2>
         <p>Welcome back! Please enter your details.</p>
       </div>
-      
+
       {error && <div className="error-message">{error}</div>}
-      
+
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
+          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required />
         </div>
-        
+
         <div className="form-group">
           <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+          <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required />
         </div>
-        
+
         <button type="submit" className="submit-button">Sign In</button>
       </form>
-      
+
       <div className="form-footer">
-        <p>Dont have an account? <Link to="/register">Sign up</Link></p>
+        <p>Don't have an account? <Link to="/register">Sign up</Link></p>
       </div>
     </div>
   );

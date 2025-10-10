@@ -11,7 +11,7 @@ export default function Grounds() {
   useEffect(() => {
     const fetchGrounds = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/ground/all');
+        const response = await axios.get('http://localhost:5000/ground/all'); // fix here
         setGrounds(response.data);
         setLoading(false);
       } catch (err) {
@@ -20,7 +20,7 @@ export default function Grounds() {
         setLoading(false);
       }
     };
-
+  
     fetchGrounds();
   }, []);
 

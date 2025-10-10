@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const groundSchema = new mongoose.Schema({
     provider_id: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },

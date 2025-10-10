@@ -1,11 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const groundController = require('../controllers/groundController');
-const auth = require('../middlewares/auth');
+const { createGround, getAllGrounds,getGroundById } = require("../controllers/groundcontroller");
+const auth = require("../middlewares/auth");
 
-router.post('/create', auth, groundController.createGround);
-router.get('/all', groundController.getAllGrounds);
-router.get('/:id', groundController.getGroundById); 
-router.delete('/:id', auth, groundController.deleteGround);
+router.post("/create", auth, createGround); // ✅ correct now
+router.get("/all", getAllGrounds);
+router.get("/:ground_id", getGroundById);
 
-module.exports = router;
+module.exports = router; // ✅ export router, not controllers
