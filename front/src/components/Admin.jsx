@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import axios from "axios";
 import "../css/Admin.css";
 
@@ -66,6 +66,8 @@ export default function Admin() {
       setGrounds(grounds.filter(g => g._id !== id));
       setSuccess("Ground deleted successfully!");
     } catch (err) {
+      console.log(err);
+      
       setError("Failed to delete ground");
     }
   };

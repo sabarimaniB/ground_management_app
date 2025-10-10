@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom'; // Import useParams for URL parameters
 import '../css/BookingPage.css'; // Assuming you have a CSS file for styling
@@ -11,7 +11,7 @@ const BookingPage = () => {
 
     const handleBooking = async () => {
         try {
-            const response = await axios.post('http://localhost:5000/booking/create', {
+            await axios.post('http://localhost:5000/booking/create', {
                 ground_id: groundId,
                 bookingDate: date,
                 startTime,
