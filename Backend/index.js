@@ -8,14 +8,16 @@ const bookingRoutes = require('./routes/bookingroute');
 
 const app = express();
 
-// ✅ CORS setup (allow cookies)
+
 const corsOptions = {
-    origin: ['http://localhost:5173','https://ground-management-app-backend-app.onrender.com','https://ground-management-app-frontend.onrender.com'], // Your React app’s origin
+    origin: [
+        'http://localhost:5173', // local frontend
+        'https://ground-management-app-frontend.onrender.com' // deployed frontend
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true // ✅ Required to send cookies
+    credentials: true // ✅ Allow cookies or Authorization headers
 };
 
-// ✅ Middlewares
 app.use(cors(corsOptions));
 app.use(express.json());
 // ✅ MongoDB Connection
