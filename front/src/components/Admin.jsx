@@ -27,7 +27,7 @@ export default function Admin() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/ground/create",
+        "https://ground-management-app-backend-app.onrender.com/ground/create",
         formData,
         {
           headers: {
@@ -58,7 +58,7 @@ export default function Admin() {
     if (!window.confirm("Are you sure you want to delete this ground?")) return;
     
     try {
-      await axios.delete(`http://localhost:5000/ground/${id}`, {
+      await axios.delete(`https://ground-management-app-backend-app.onrender.com/ground/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }

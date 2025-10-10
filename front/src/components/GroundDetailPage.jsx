@@ -21,7 +21,7 @@ export default function GroundDetails() {
   useEffect(() => {
     const fetchGround = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/ground/${id}`);
+        const response = await axios.get(`https://ground-management-app-backend-app.onrender.com/ground/${id}`);
         setGround(response.data);
         setLoading(false);
       } catch (err) {
@@ -75,7 +75,7 @@ export default function GroundDetails() {
 
       console.log('Booking payload:', payload);
 
-      await axios.post('http://localhost:5000/bookings/create', payload, {
+      await axios.post('https://ground-management-app-backend-app.onrender.com/bookings/create', payload, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }

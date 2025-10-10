@@ -11,7 +11,7 @@ const BookingPage = () => {
 
     const handleBooking = async () => {
         try {
-            await axios.post('http://localhost:5000/booking/create', {
+            await axios.post('https://ground-management-app-backend-app.onrender.com/booking/create', {
                 ground_id: groundId,
                 bookingDate: date,
                 startTime,

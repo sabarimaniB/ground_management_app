@@ -23,7 +23,7 @@ export default function Register() {
     e.preventDefault();
     setError('');
     try {
-      const response = await axios.post('http://localhost:5000/user/register', formData);
+      const response = await axios.post('https://ground-management-app-backend-app.onrender.com/user/register', formData);
 
       // Store token & user info if backend returns them
       if (response.data.user && response.data.token) {

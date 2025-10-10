@@ -11,7 +11,7 @@ export default function Booking() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/bookings/user/booked', {
+        const response = await axios.get('https://ground-management-app-backend-app.onrender.com/bookings/user/booked', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`
           }
