@@ -10,7 +10,7 @@ const app = express();
 
 // ✅ CORS setup (allow cookies)
 const corsOptions = {
-    origin: 'http://localhost:5173', // Your React app’s origin
+    origin: ['http://localhost:5173','https://ground-management-app-backend-app.onrender.com','https://ground-management-app-frontend.onrender.com'], // Your React app’s origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true // ✅ Required to send cookies
 };
